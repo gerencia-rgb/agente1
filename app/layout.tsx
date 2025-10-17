@@ -16,9 +16,8 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Script
-          src="https://cdn.jsdelivr.net/npm/@openai/chatkit@latest/dist/chatkit.js"
+          src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js"
           strategy="beforeInteractive"
-          async
         />
 
       </head>
