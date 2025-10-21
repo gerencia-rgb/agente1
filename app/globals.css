@@ -33,17 +33,25 @@ body {
   font-family: var(--font-sans);
 }
 
-/* Hide thinking messages and internal processing */
+/* Hide thinking messages and internal processing - More aggressive approach */
 openai-chatkit [data-testid*="thinking"],
 openai-chatkit [class*="thinking"],
 openai-chatkit [class*="thought"],
-openai-chatkit [data-message-type="thinking"] {
-  display: none !important;
-}
-
-/* Hide JSON-like thinking content */
+openai-chatkit [data-message-type="thinking"],
 openai-chatkit [class*="json"],
 openai-chatkit [class*="intent"],
 openai-chatkit [class*="intencion"] {
   display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Additional aggressive hiding for any suspicious content */
+openai-chatkit div,
+openai-chatkit span,
+openai-chatkit p {
+  position: relative;
 }

@@ -72,47 +72,90 @@ export function ChatKitPanel({
     };
   }, []);
 
-  // Hide thinking messages
+  // Hide thinking messages - more robust approach
   useEffect(() => {
+    if (!isBrowser) return;
+
     const hideThinkingMessages = () => {
-      const chatkitElement = document.querySelector('openai-chatkit');
-      if (chatkitElement) {
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-              if (node.nodeType === Node.ELEMENT_NODE) {
-                const element = node as Element;
-                const textContent = element.textContent || '';
-                
-                // Hide elements containing "Thought for" or JSON-like content
-                if (textContent.includes('Thought for') || 
-                    textContent.includes('{"intencion":') ||
-                    textContent.includes('{"intention":')) {
-                  (element as HTMLElement).style.display = 'none';
-                }
-                
-                // Also check child elements
-                const thinkingElements = element.querySelectorAll('*');
-                thinkingElements.forEach((child) => {
-                  const childText = child.textContent || '';
-                  if (childText.includes('Thought for') || 
-                      childText.includes('{"intencion":') ||
-                      childText.includes('{"intention":')) {
-                    (child as HTMLElement).style.display = 'none';
+      // Function to hide elements with thinking content
+      const hideElements = (container: Element) => {
+        const allElements = container.querySelectorAll('*');
+        allElements.forEach((element) => {
+          const textContent = element.textContent || '';
+          if (textContent.includes('Thought for') || 
+              textContent.includes('{"intencion":') ||
+              textContent.includes('{"intention":') ||
+              textContent.includes('intencion') ||
+              textContent.includes('intention')) {
+            (element as HTMLElement).style.display = 'none';
+            (element as HTMLElement).style.visibility = 'hidden';
+            (element as HTMLElement).style.height = '0';
+            (element as HTMLElement).style.overflow = 'hidden';
+          }
+        });
+      };
+
+      // Set up observer for ChatKit element
+      const setupObserver = () => {
+        const chatkitElement = document.querySelector('openai-chatkit');
+        if (chatkitElement) {
+          // Hide existing thinking messages
+          hideElements(chatkitElement);
+          
+          // Set up mutation observer
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              mutation.addedNodes.forEach((node) => {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                  const element = node as Element;
+                  hideElements(element);
+                  
+                  // Also hide the element itself if it contains thinking content
+                  const textContent = element.textContent || '';
+                  if (textContent.includes('Thought for') || 
+                      textContent.includes('{"intencion":') ||
+                      textContent.includes('{"intention":')) {
+                    (element as HTMLElement).style.display = 'none';
+                    (element as HTMLElement).style.visibility = 'hidden';
+                    (element as HTMLElement).style.height = '0';
+                    (element as HTMLElement).style.overflow = 'hidden';
                   }
-                });
-              }
+                }
+              });
             });
           });
-        });
+          
+          observer.observe(chatkitElement, {
+            childList: true,
+            subtree: true
+          });
+          
+          return observer;
+        }
+        return null;
+      };
+
+      // Try to set up observer immediately
+      let observer = setupObserver();
+      
+      // If ChatKit isn't ready yet, try again after a delay
+      if (!observer) {
+        const retryInterval = setInterval(() => {
+          observer = setupObserver();
+          if (observer) {
+            clearInterval(retryInterval);
+          }
+        }, 100);
         
-        observer.observe(chatkitElement, {
-          childList: true,
-          subtree: true
-        });
-        
-        return () => observer.disconnect();
+        // Clean up retry after 10 seconds
+        setTimeout(() => clearInterval(retryInterval), 10000);
       }
+
+      return () => {
+        if (observer) {
+          observer.disconnect();
+        }
+      };
     };
 
     const cleanup = hideThinkingMessages();
