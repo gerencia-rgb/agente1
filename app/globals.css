@@ -32,3 +32,18 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+
+/* Hide thinking messages and internal processing */
+openai-chatkit [data-testid*="thinking"],
+openai-chatkit [class*="thinking"],
+openai-chatkit [class*="thought"],
+openai-chatkit [data-message-type="thinking"] {
+  display: none !important;
+}
+
+/* Hide JSON-like thinking content */
+openai-chatkit [class*="json"],
+openai-chatkit [class*="intent"],
+openai-chatkit [class*="intencion"] {
+  display: none !important;
+}
