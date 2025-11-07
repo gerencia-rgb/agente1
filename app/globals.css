@@ -2,7 +2,7 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2a3e;
   color-scheme: light;
 }
 
@@ -54,4 +54,13 @@ openai-chatkit div,
 openai-chatkit span,
 openai-chatkit p {
   position: relative;
+}
+
+/* Change user message background to white */
+openai-chatkit [data-role="user"],
+openai-chatkit [data-message-role="user"],
+openai-chatkit [class*="user-message"],
+openai-chatkit [class*="UserMessage"] {
+  background-color: #ffffff !important;
+  border: 1px solid #e5e7eb !important;
 }
