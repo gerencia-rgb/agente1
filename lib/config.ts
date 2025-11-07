@@ -14,7 +14,7 @@ export const STARTER_PROMPTS: StartScreenPrompt[] = [
   {
     label: "Quiero realizar un registro",
     prompt: "Quiero realizar un registro",
-    icon: "pencil",
+    icon: "write",
   },
 ];
 
