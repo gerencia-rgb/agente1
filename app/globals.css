@@ -28,7 +28,7 @@
 }
 
 body {
-  background: var(--background);
+  background: #f4f4f4;
   color: var(--foreground);
   font-family: var(--font-sans);
 }
@@ -62,5 +62,6 @@ openai-chatkit [data-message-role="user"],
 openai-chatkit [class*="user-message"],
 openai-chatkit [class*="UserMessage"] {
   background-color: #ffffff !important;
-  border: 1px solid #e5e7eb !important;
+  color: #1f2a3e !important;
+  border: none !important;
 }
