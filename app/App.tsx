@@ -22,6 +22,9 @@ export default function App() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-end bg-transparent">
       <div className="mx-auto w-full max-w-5xl">
+        <div className="mb-4 text-center">
+          <h1 className="text-4xl font-bold" style={{ color: '#1f2a3e' }}>TRAZA</h1>
+        </div>
         <ChatKitPanel
           theme={scheme}
           onWidgetAction={handleWidgetAction}
