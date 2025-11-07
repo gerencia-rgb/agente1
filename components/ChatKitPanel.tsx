@@ -357,8 +357,8 @@ export function ChatKitPanel({
       density: 'compact',
       color: {
         accent: {
-          primary: theme === 'dark' ? '#f1f5f9' : '#ffffff',
-          level: 2
+          primary: theme === 'dark' ? '#f1f5f9' : '#1F2A3E',
+          level: 1
         },
         surface: {
           background: theme === 'dark' ? '#0f172a' : '#f4f4f4',
