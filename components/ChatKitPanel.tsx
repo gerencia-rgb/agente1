@@ -5,10 +5,8 @@ import { ChatKit, useChatKit } from "@openai/chatkit-react";
 import {
   STARTER_PROMPTS,
   PLACEHOLDER_INPUT,
-  GREETING,
   CREATE_SESSION_ENDPOINT,
   WORKFLOW_ID,
-  getThemeConfig,
 } from "@/lib/config";
 import { ErrorOverlay } from "./ErrorOverlay";
 import type { ColorScheme } from "@/hooks/useColorScheme";
@@ -354,18 +352,60 @@ export function ChatKitPanel({
   const chatkit = useChatKit({
     api: { getClientSecret },
     theme: {
-      colorScheme: theme,
-      ...getThemeConfig(theme),
+      colorScheme: theme === 'dark' ? 'dark' : 'light',
+      radius: 'sharp',
+      density: 'compact',
+      color: {
+        accent: {
+          primary: theme === 'dark' ? '#f1f5f9' : '#1F2A3E',
+          level: 2
+        },
+        surface: {
+          background: theme === 'dark' ? '#0f172a' : '#f4f4f4',
+          foreground: theme === 'dark' ? '#1e293b' : '#ffffff'
+        }
+      },
+      typography: {
+        baseSize: 16,
+        fontFamily: 'Inter, sans-serif',
+        fontSources: [
+          {
+            family: 'Inter',
+            src: 'https://rsms.me/inter/font-files/Inter-Regular.woff2',
+            weight: 400,
+            style: 'normal'
+          },
+          {
+            family: 'Inter',
+            src: 'https://rsms.me/inter/font-files/Inter-Medium.woff2',
+            weight: 500,
+            style: 'normal'
+          },
+          {
+            family: 'Inter',
+            src: 'https://rsms.me/inter/font-files/Inter-SemiBold.woff2',
+            weight: 600,
+            style: 'normal'
+          },
+          {
+            family: 'Inter',
+            src: 'https://rsms.me/inter/font-files/Inter-Bold.woff2',
+            weight: 700,
+            style: 'normal'
+          }
+        ]
+      }
     },
     startScreen: {
-      greeting: GREETING,
+      greeting: '¿Cómo te puedo ayudar hoy?',
       prompts: STARTER_PROMPTS,
     },
     composer: {
       placeholder: PLACEHOLDER_INPUT,
       attachments: {
-        // Enable attachments
         enabled: true,
+        maxCount: 5,
+        maxSize: 10485760
       },
     },
     threadItemActions: {
@@ -434,7 +474,7 @@ export function ChatKitPanel({
   }
 
   return (
-    <div className="relative pb-8 flex h-[90vh] w-full rounded-2xl flex-col overflow-hidden bg-white shadow-sm transition-colors dark:bg-slate-900">
+    <div className="relative pb-8 flex h-[90vh] w-full flex-col overflow-hidden bg-white transition-colors dark:bg-slate-900">
       <ChatKit
         key={widgetInstanceKey}
         control={chatkit.control}
